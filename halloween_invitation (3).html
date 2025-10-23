@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASE FILE #919 - MURDER MYSTERY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0000 100%);
+            color: #d4d4d4;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-tape {
+            background: repeating-linear-gradient(
+                45deg,
+                #ffeb3b,
+                #ffeb3b 30px,
+                #000 30px,
+                #000 60px
+            );
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            letter-spacing: 8px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 80px 20px 20px 20px;
+            padding: 0;
+        }
+
+        .case-file {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1a 100%);
+            border: 4px solid #ff0000;
+            padding: 40px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.6), 0 0 80px rgba(255, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .skull-corner {
+            position: absolute;
+            font-size: 48px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .skull-tl { top: -20px; left: -20px; }
+        .skull-tr { top: -20px; right: -20px; animation-delay: 0.5s; }
+        .skull-bl { bottom: -20px; left: -20px; animation-delay: 1s; }
+        .skull-br { bottom: -20px; right: -20px; animation-delay: 1.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .danger-stamp {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            border: 4px solid #ff0000;
+            color: #ff0000;
+            padding: 15px 25px;
+            transform: rotate(15deg);
+            font-size: 28px;
+            font-weight: bold;
+            opacity: 0.8;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: rotate(15deg) scale(1); }
+            50% { transform: rotate(15deg) scale(1.05); }
+        }
+
+        h1 {
+            color: #ff0000;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #ff0000, 2px 2px 4px #000;
+            letter-spacing: 4px;
+        }
+
+        .case-number {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 16px;
+            letter-spacing: 3px;
+        }
+
+        .alert-box {
+            background: linear-gradient(135deg, #ff6600 0%, #ff0000 100%);
+            color: #fff;
+            padding: 20px;
+            margin: 30px 0;
+            border-left: 6px solid #ffeb3b;
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid #ff0000;
+        }
+
+        .section-title {
+            color: #ffeb3b;
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .info-item {
+            display: flex;
+            margin: 12px 0;
+            font-size: 16px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .info-label {
+            color: #ff6600;
+            font-weight: bold;
+            min-width: 150px;
+        }
+
+        .info-value {
+            color: #d4d4d4;
+        }
+
+        .game-box {
+            background: linear-gradient(135deg, #8b0000 0%, #ff4444 50%, #8b0000 100%);
+            color: #fff;
+            padding: 25px;
+            margin: 25px 0;
+            border: 4px double #ffeb3b;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 235, 59, 0.4);
+        }
+
+        .game-title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffeb3b;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .game-text {
+            font-size: 16px;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+
+        .evidence-list {
+            margin: 20px 0;
+        }
+
+        .evidence-item {
+            margin: 12px 0;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid #ff6600;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .evidence-item:before {
+            content: "⚠️";
+            position: absolute;
+            left: 12px;
+            font-size: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 3px solid #ff0000;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .footer-warning {
+            color: #ff0000;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-tape">⚠️ CRIME SCENE - DO NOT CROSS ⚠️ CRIME SCENE - DO NOT CROSS ⚠️</div>
+    
+    <div class="container">
+        <div class="case-file">
+            <div class="skull-corner skull-tl">💀</div>
+            <div class="skull-corner skull-tr">💀</div>
+            <div class="skull-corner skull-bl">💀</div>
+            <div class="skull-corner skull-br">💀</div>
+            
+            <div class="danger-stamp">DANGER</div>
+            
+            <h1>CASE FILE #919</h1>
+            <div class="case-number">MURDER MYSTERY INVESTIGATION</div>
+            
+            <div class="alert-box">
+                ⚠️ WARNING: ENTER AT YOUR OWN RISK ⚠️<br>
+                <div style="margin-top: 15px; font-size: 16px;">INVITES ONLY - Uninvited guests will not survive the night...</div>
+            </div>
+            
+            <div class="info-section" style="background: linear-gradient(135deg, #1a0a0a 0%, #2d0a0a 100%); border: 3px solid #ffeb3b;">
+                <div class="section-title" style="color: #ffeb3b; font-size: 24px;">🎃 RSVP OR FACE THE CONSEQUENCES 🎃</div>
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="https://forms.gle/YRa5pwDzcGYbZqmP9" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #ff0000 0%, #ff6600 100%); color: #fff; padding: 15px 30px; text-decoration: none; font-size: 18px; font-weight: bold; border: 3px solid #ffeb3b; box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); transition: all 0.3s;">
+                        📋 CONFIRM YOUR ATTENDANCE
+                    </a>
+                </div>
+                <div style="text-align: center; color: #ff6600; font-size: 14px; margin-top: 10px; font-weight: bold;">
+                    Only invited guests may enter. No exceptions.
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="section-title">🔍 Crime Scene Intelligence</div>
+                <div class="info-item">
+                    <span class="info-label">CRIME SCENE:</span>
+                    <span class="info-value">919 E Jacob St, Chandler, AZ 85225</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ACCESS CODE:</span>
+                    <span class="info-value">#7007 (Guard this with your life)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">SUSPECTS:</span>
+                    <span class="info-value">Sushanth & Vidhya (Proceed with caution)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">TIME OF DEATH:</span>
+                    <span class="info-value">Halloween Night (Oct 31st) - TBD</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">DRINKS:</span>
+                    <span class="info-value">BYOB - Limited house supply (wine, vodka, mixers)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">FOOD:</span>
+                    <span class="info-value">Light snacks will make an appearance — blink and you might miss them.</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">COSTUME:</span>
+                    <span class="info-value">Anything goes - disguise yourself!</span>
+                </div>
+            </div>
+
+            <div class="game-box">
+                <div class="game-title">🔪 THE MURDER MYSTERY GAME 🔪</div>
+                <div class="game-text">
+                    <strong>GET YOUR CHARACTER CARD AT THE DOOR</strong>
+                </div>
+                <div class="game-text">
+                    One among you is THE KILLER. Others are witnesses, suspects, or victims-to-be.
+                </div>
+                <div class="game-text">
+                    Find clues • Question everyone • Solve before midnight
+                </div>
+                <div class="game-text">
+                    <strong>TRUST NO ONE</strong>
+                </div>
+            </div>
+
+            <div class="evidence-list">
+                <div class="evidence-item">Arrive in costume or character</div>
+                <div class="evidence-item">Everyone gets a secret identity and motives</div>
+                <div class="evidence-item">Clues will be revealed throughout the night</div>
+                <div class="evidence-item">Can you solve the mystery in time?</div>
+            </div>
+
+            <div class="footer">
+                Contact the case manager to RSVP<br>
+                Failure to confirm may result in... consequences
+                <div class="footer-warning">💀 ENTER IF YOU DARE 💀</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Flickering red glow effect
+        setInterval(() => {
+            const title = document.querySelector('h1');
+            if (Math.random() > 0.8) {
+                title.style.textShadow = '0 0 30px #ff0000, 2px 2px 4px #000';
+                setTimeout(() => {
+                    title.style.textShadow = '0 0 20px #ff0000, 2px 2px 4px #000';
+                }, 100);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
